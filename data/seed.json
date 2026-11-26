@@ -1,0 +1,41 @@
+{
+  "items": [
+    {"name": "书", "category": "书", "qty": 120, "volume": 0.0025, "weight": 0.7},
+    {"name": "衣物", "category": "衣物", "qty": 60, "volume": 0.035, "weight": 0.5},
+    {"name": "锅碗", "category": "厨房", "qty": 40, "volume": 0.02, "weight": 0.8},
+    {"name": "小家电", "category": "家电", "qty": 9, "volume": 0.06, "weight": 3.2},
+    {"name": "折叠桌", "category": "家具", "qty": 1, "volume": 0.18, "weight": 12},
+    {"name": "椅子", "category": "家具", "qty": 2, "volume": 0.12, "weight": 6},
+    {"name": "纸箱杂物", "category": "杂物", "qty": 14, "volume": 0.05, "weight": 4.5},
+    {"name": "行李箱", "category": "杂物", "qty": 3, "volume": 0.09, "weight": 8}
+  ],
+  "quotes": [
+    {"company": "顺安搬家", "mode": "按体积", "rate": 260, "minimum": 800},
+    {"company": "老兵搬家", "mode": "按重量", "rate": 1.6, "minimum": 500, "floor_fee": 0},
+    {"company": "快跑货运", "mode": "按件", "rate": 12, "minimum": 400, "floor_fee": 70}
+  ],
+  "addresses": [
+    {"org": "中国移动", "notified": true},
+    {"org": "中国联通", "notified": true},
+    {"org": "中国电信", "notified": true},
+    {"org": "国家电网", "notified": true},
+    {"org": "自来水公司", "notified": true},
+    {"org": "燃气公司", "notified": true},
+    {"org": "物业", "notified": true},
+    {"org": "社区居委会", "notified": true},
+    {"org": "派出所", "notified": true},
+    {"org": "社保中心", "notified": true},
+    {"org": "医保中心", "notified": true},
+    {"org": "公积金中心", "notified": true},
+    {"org": "税务局", "notified": false},
+    {"org": "银行（工资卡）", "notified": true},
+    {"org": "银行（信用卡）", "notified": false},
+    {"org": "保险公司", "notified": true},
+    {"org": "快递默认地址", "notified": true},
+    {"org": "外卖默认地址", "notified": false},
+    {"org": "网购平台", "notified": true},
+    {"org": "学校/幼儿园", "notified": false},
+    {"org": "单位 HR", "notified": true},
+    {"org": "家庭医生/体检机构", "notified": false}
+  ]
+}

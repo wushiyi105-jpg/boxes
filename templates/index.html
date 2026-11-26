@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Boxes · 搬家清单</title>
+<style>
+  :root{--bg:#0d1117;--panel:#171d26;--line:#26303c;--ink:#e8eef5;--dim:#8a97a6;--accent:#c9a45c;--warn:#e0a458}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,"PingFang SC",sans-serif}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 20px 80px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--dim);font-size:13px;margin-bottom:20px}
+  .cols{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+  .card h2{font-size:14px;margin:0 0 8px;color:var(--accent)}
+  .row{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;gap:10px}
+  .finding{color:var(--warn);font-size:13px}
+  .tag{color:var(--dim);font-size:12px}
+  .best{color:#8fd694}
+  a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Boxes</h1>
+  <div class="sub">{{ '%.2f' % p.volume }} 立方 · {{ '%.0f' % p.weight }} 公斤 · {{ p.pieces }} 件 · {{ p.trips }} 趟
+    · 改址 {{ '%.0f' % (addr * 100) }}% · 扣 {{ p.penalty_total }} 分</div>
+
+  <div class="cols">
+    <div>
+      <div class="card"><h2>报价归一</h2>
+        {% for l in p.lines %}
+        <div class="row"><span>{% if p.cheapest and l.company == p.cheapest.company %}<span class="best">★</span>{% endif %} {{ l.company }}（{{ l.mode }}）</span>
+          <span>{{ '{:,.0f}'.format(l.total) }} 元 · {{ '{:,.0f}'.format(l.per_m3) }}/立方</span></div>
+        {% endfor %}
+      </div>
+      <div class="card"><h2>物品</h2>
+        {% for it in items %}
+        <div class="row"><span>{{ it.name }} × {{ it.qty }}</span><span class="tag">{{ it.category }} · {{ '%.2f' % it.volume }} 立方</span></div>
+        {% endfor %}
+      </div>
+    </div>
+    <div>
+      <div class="card"><h2>按类目</h2>
+        {% for k, v in cats.items() %}<div class="row"><span>{{ k }}</span><span>{{ '%.2f' % v }} 立方</span></div>{% endfor %}
+      </div>
+      <div class="card"><h2>还没改址</h2>
+        <div class="tag">剩 {{ left|length }} 家</div>
+        {% for org in left[:10] %}<div class="row"><span>{{ org }}</span><span class="tag">待勾</span></div>{% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% for f in p.findings[:6] %}<div class="finding">{{ f.rule_id }} -{{ f.penalty }} · {{ f.message }}</div>{% endfor %}
+  {% if p.findings|length > 6 %}<div class="tag">…还有 {{ p.findings|length - 6 }} 条（改址逐家列在 todo）</div>{% endif %}
+  <p class="tag"><a href="/health">健康检查</a></p>
+</div>
+</body>
+</html>
