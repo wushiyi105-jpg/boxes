@@ -49,7 +49,7 @@ def seed(db: Path = typer.Option(None)) -> None:
     console.print(f"已写入 {len(data['items'])} 类物品、{len(data['quotes'])} 份报价、{len(data['addresses'])} 家机构")
 
 
-@app.command()
+@app.command("plan")
 def plan_cmd(floors: int = typer.Option(1), db: Path = typer.Option(None)) -> None:
     """体积、趟数、三档报价、扣分。"""
     store = _store(_settings(db))
@@ -62,7 +62,6 @@ def plan_cmd(floors: int = typer.Option(1), db: Path = typer.Option(None)) -> No
     console.print(f"合计扣 {p.penalty_total} 分")
 
 
-app.command(name="plan")(plan_cmd)
 
 
 @app.command()
