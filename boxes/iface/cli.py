@@ -8,8 +8,9 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
+from ..adapters.llm import build_llm
 from ..adapters.store import SqliteStore
-from ..app.run import plan, sheet, summary
+from ..app.run import PROMPT, plan, sheet, summary
 from ..config import Settings
 from ..config import settings as default_settings
 from ..doctor import main as doctor_main
@@ -75,7 +76,8 @@ def notify(org: str = typer.Option(..., help="机构名"), db: Path = typer.Opti
 def note(floors: int = typer.Option(1), db: Path = typer.Option(None)) -> None:
     """模型写清单说明（无 key 时不编）。"""
     s = _settings(db)
-    text, notes = summary(_store(s), s, floors)
+    llm = build_llm(s.llm_base_url, s.llm_api_key, s.llm_model, PROMPT) if s.llm_enabled else None
+    text, notes = summary(_store(s), s, floors, llm)
     if text:
         console.print(text)
     for n in notes:
