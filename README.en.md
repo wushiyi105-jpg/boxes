@@ -52,6 +52,9 @@ Per-item volume × quantity; it excludes dismantling and stairs.
 **Can it change my address everywhere?**
 No, it lists what is left and you tick them off.
 
+**Was the Docker image verified?**
+Docker is not installed on the build machine, so `docker build .` was not run and the image is unverified; only the Dockerfile and ports were checked statically.
+
 ## Commands
 
 See the Chinese README (`README.md`) for the command table with flags; every command supports `--help`.
@@ -64,13 +67,13 @@ FastAPI + Uvicorn, Jinja2, pydantic / pydantic-settings, httpx, Typer + Rich, SQ
 
 ```mermaid
 graph LR
-  A[物品清单] --> M[体积 / 重量 / 件数]
-  B[搬家报价] --> M[三档归一]
-  C[机构清单] --> M[改址状态]
-  M --> R[规则：趟数 / 报价离群 / 未改址]
-  R --> P[模型写清单说明]
-  P --> G[数字守卫]
-  G --> O[清单 + 待办]
+  A[item list] --> M[volume / weight / count]
+  B[moving quotes] --> M[three-tier normalization]
+  C[institution list] --> M[address-change status]
+  M --> R[rules: trips / quote outliers / address not changed]
+  R --> P[model writes list note]
+  P --> G[number guard]
+  G --> O[list + to-dos]
 ```
 
 ## Layout

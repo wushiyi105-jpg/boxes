@@ -63,8 +63,6 @@ def plan_cmd(floors: int = typer.Option(1), db: Path = typer.Option(None)) -> No
     console.print(f"合计扣 {p.penalty_total} 分")
 
 
-
-
 @app.command()
 def notify(org: str = typer.Option(..., help="机构名"), db: Path = typer.Option(None)) -> None:
     """勾掉一家已改址。"""

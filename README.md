@@ -80,6 +80,9 @@ python -m boxes serve        # http://127.0.0.1:8010
 **能自动改地址吗？**
 不能，只列还没改的机构，改完用 `notify` 勾掉。
 
+**Docker 镜像验证了吗？**
+本机没有 Docker，`docker build .` 未执行，镜像未构建验证；Dockerfile 与端口只做了静态核对。
+
 ## 命令参考
 
 | 命令 | 作用 | 常用参数 |
