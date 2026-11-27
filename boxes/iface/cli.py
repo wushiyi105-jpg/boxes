@@ -9,6 +9,7 @@ import typer
 from rich.console import Console
 
 from ..adapters.llm import build_llm
+from ..adapters.notify import WebhookNotifier
 from ..adapters.store import SqliteStore
 from ..app.run import PROMPT, plan, sheet, summary
 from ..config import Settings
@@ -31,6 +32,13 @@ def _settings(db: Path | None, port: int | None = None) -> Settings:
 
 def _store(settings: Settings) -> SqliteStore:
     return SqliteStore(settings.db_path)
+
+
+def _notify(settings: Settings, text: str) -> None:
+    if not text or not settings.webhook_url:
+        return
+    ok = WebhookNotifier(settings.webhook_url).send(text)
+    console.print(f"[dim]webhook {'ok' if ok else 'failed'}[/]")
 
 
 @app.command()
@@ -76,12 +84,19 @@ def note(floors: int = typer.Option(1), db: Path = typer.Option(None)) -> None:
     s = _settings(db)
     llm = build_llm(s.llm_base_url, s.llm_api_key, s.llm_model, PROMPT) if s.llm_enabled else None
     text, notes = summary(_store(s), s, floors, llm)
+    body: list[str] = []
     if text:
         console.print(text)
+        body.append(text)
     for n in notes:
-        console.print(f"  [yellow]{n}[/]")
+        line = f"  [yellow]{n}[/]"
+        console.print(line)
+        body.append(str(n))
     if not text:
-        console.print(sheet(_store(s), floors))
+        fallback = sheet(_store(s), floors)
+        console.print(fallback)
+        body.append(json.dumps(fallback, ensure_ascii=False, indent=2, default=str))
+    _notify(s, "\n".join(body))
 
 
 @app.command()
