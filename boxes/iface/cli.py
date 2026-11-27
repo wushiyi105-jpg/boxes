@@ -11,6 +11,7 @@ from rich.console import Console
 from ..adapters.llm import build_llm
 from ..adapters.notify import WebhookNotifier
 from ..adapters.store import SqliteStore
+from ..app.quote import build_quote
 from ..app.run import PROMPT, plan, sheet, summary
 from ..config import Settings
 from ..config import settings as default_settings
@@ -69,6 +70,24 @@ def plan_cmd(floors: int = typer.Option(1), db: Path = typer.Option(None)) -> No
     for f in p.findings:
         console.print(f"  [yellow]{f.rule_id}[/] -{f.penalty} {f.message}")
     console.print(f"合计扣 {p.penalty_total} 分")
+
+
+@app.command()
+def quote(
+    floors: int = typer.Option(1, help="楼层数"),
+    out: Path = typer.Option(None, help="输出 Markdown；不填打印"),
+    db: Path = typer.Option(None),
+) -> None:
+    """车型建议 + 三家报价归一 + 加价套路 + 可勾选改址清单。"""
+    store = _store(_settings(db))
+    p = plan(store, floors)
+    body = build_quote(p, store.list_addresses(), floors)
+    if out:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(body, encoding="utf-8")
+        console.print(f"[green]已写出[/] {out}（{len(body.splitlines())} 行）")
+    else:
+        console.print(body)
 
 
 @app.command()
