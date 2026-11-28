@@ -1,6 +1,6 @@
 {% from "_macros.html" import shell, head, stats, card, tag, empty, note %}
-{% call shell("Boxes", "搬家清单", true) %}
-{{ head("搬家清单", "%.2f"|format(p.volume) ~ " 立方 · " ~ "%.0f"|format(p.weight) ~ " 公斤 · " ~ p.pieces ~ " 件") }}
+{% call shell("Boxes", "搬家运单", true) %}
+{{ head("这几家搬，实际要花多少", "%.2f"|format(p.volume) ~ " 立方 · " ~ "%.0f"|format(p.weight) ~ " 公斤 · " ~ p.pieces ~ " 件") }}
 
 {{ stats([
   ("体积", "%.2f"|format(p.volume), "m³"),
@@ -8,6 +8,16 @@
   ("件数", p.pieces, "件"),
   ("车次", p.trips, "趟")
 ]) }}
+
+{% if p.cheapest %}
+{% call card("最低到手价", p.cheapest.company) %}
+  <div class="ticket">
+    <div class="label">总价 / 含车辆与里程</div>
+    <div class="price">{{ "{:,.0f}".format(p.cheapest.total) }} <small style="font-size:14px;font-weight:500">元</small></div>
+    <div class="detail">{{ p.cheapest.mode }} · {{ "{:,.0f}".format(p.cheapest.per_m3) }} 元 / 立方</div>
+  </div>
+{% endcall %}
+{% endif %}
 
 <div class="cols">
   <div>
